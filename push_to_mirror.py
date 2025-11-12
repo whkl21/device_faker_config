@@ -28,6 +28,20 @@ def main():
     print("🔄 Device Faker Config - 推送到镜像仓库")
     print("=" * 60)
     
+    # 确保在正确的子模块目录中运行
+    import os
+    
+    # 获取脚本文件的实际目录
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    current_dir = os.getcwd()
+    
+    # 切换到脚本所在目录（config 子模块目录）
+    if script_dir != current_dir:
+        print(f"📁 切换到子模块目录: {script_dir}")
+        os.chdir(script_dir)
+    
+    print(f"📍 工作目录: {os.getcwd()}")
+    
     # 检查是否在 git 仓库中
     success, _ = run_command("git rev-parse --git-dir")
     if not success:
@@ -37,10 +51,17 @@ def main():
     # 检查 mirror 远程仓库
     success, output = run_command("git remote -v")
     if not success or "mirror" not in output:
-        print("❌ 错误: 未配置 mirror 远程仓库")
-        print("\n请先配置镜像仓库:")
-        print("git remote add mirror https://gitee.com/Seyud/device_faker_config_mirror.git")
-        return 1
+        print("⚠️  未检测到 mirror 远程仓库，正在自动配置...")
+        print("🔧 添加镜像仓库远程地址...")
+        
+        mirror_url = "https://gitee.com/Seyud/device_faker_config_mirror.git"
+        success, output = run_command(f"git remote add mirror {mirror_url}")
+        
+        if success:
+            print(f"✅ 镜像仓库配置成功: {mirror_url}")
+        else:
+            print(f"❌ 镜像仓库配置失败: {output}")
+            return 1
     
     # 显示当前分支
     success, branch = run_command("git branch --show-current")
