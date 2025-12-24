@@ -1,3 +1,5 @@
+**简体中文** | [English](https://github.com/Seyud/device_faker/blob/main/config/docs/en/README.md)
+
 # Device Faker 配置贡献指南
 
 欢迎为 Device Faker 项目贡献设备配置！通过贡献配置，您可以帮助更多用户获得更好的机型伪装效果。
